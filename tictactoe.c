@@ -21,14 +21,13 @@ char printBoard(char board[]){
 }
 
 int inputMove(int pNo){
-	int row, col, index;
+	int input, row, col, index;
 
-	printf("Player %d, please input your column: ", pNo);
-	scanf("%d", &row);
+	printf("Player %d, please input your column & row (CR): ", pNo);
+	scanf("%d", &input);
 
-	printf("Player %d, please input your row: ", pNo);
-	scanf("%d", &col);
-	
+	col = input%10;
+	row = input/10;	
 	index = row*3+col;
 
 	return index;
