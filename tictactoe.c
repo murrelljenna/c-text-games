@@ -5,15 +5,15 @@ char printBoard(char board[]){
 	printf("     0     1     2   \n");
 	printf("   -----------------\n");
 	printf("  |     |     |     |\n");	
-	printf("0 |  %c  |  %c  |  %c  |\n", board[0], board[3], board[6]);	
+	printf("0 |  %c  |  %c  |  %c  |\n", board[0], board[1], board[2]);	
 	printf("  |     |     |     |\n");	
 	printf("   -----------------\n");
 	printf("  |     |     |     |\n");	
-	printf("1 |  %c  |  %c  |  %c  |\n", board[1], board[4], board[7]);	
+	printf("1 |  %c  |  %c  |  %c  |\n", board[3], board[4], board[5]);	
 	printf("  |     |     |     |\n");	
 	printf("   -----------------\n");
 	printf("  |     |     |     |\n");	
-	printf("2 |  %c  |  %c  |  %c  |\n", board[2], board[5], board[8]);	
+	printf("2 |  %c  |  %c  |  %c  |\n", board[6], board[7], board[8]);	
 	printf("  |     |     |     |\n");	
 	printf("   -----------------\n");
 
@@ -26,8 +26,8 @@ int inputMove(int pNo){
 	printf("Player %d, please input your column & row (CR): ", pNo);
 	scanf("%d", &input);
 
-	col = input%10;
-	row = input/10;	
+	col = input/10;
+	row = input%10;	
 	index = row*3+col;
 
 	return index;
