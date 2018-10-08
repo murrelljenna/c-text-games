@@ -5,9 +5,9 @@
 int main(void){
 	char mark;
 	int game_over = 0, selector = 0, index = -1, other, move;
-	int players[][10] = { { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1} };
 
-	struct Tile *board = makeBoard(9); 
+	struct Tile *board = makeBoard(9);
+	struct Player *players = makePlayers(2); 
 	while (game_over == 0){
 		switch(selector){
 			case 0:
@@ -25,14 +25,14 @@ int main(void){
 
 		do {
 			move = inputMove(selector);
-			if (contains(move, players[selector], TICTACTOE_PLAYER_LENGTH) || contains(move, players[other], TICTACTOE_PLAYER_LENGTH) || move < 0 || move > 8){
+			if (contains(move, players[selector].moves, TICTACTOE_PLAYER_LENGTH) || contains(move, players[other].moves, TICTACTOE_PLAYER_LENGTH) || move < 0 || move > 8){
 				printf("Invalid move. ");	
 			}	
 
-		} while (contains(move, players[selector], TICTACTOE_PLAYER_LENGTH) || contains(move, players[other], TICTACTOE_PLAYER_LENGTH) || move < 0 || move > 8);
+		} while (contains(move, players[selector].moves, TICTACTOE_PLAYER_LENGTH) || contains(move, players[other].moves, TICTACTOE_PLAYER_LENGTH) || move < 0 || move > 8);
 		
-		players[selector][index] = move;
-		board[players[selector][index]].mark = mark;
+		players[selector].moves[index] = move;
+		board[players[selector].moves[index]].mark = mark;
 
 		if (checkVictory(players[selector])){
 			game_over = 1;

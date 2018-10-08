@@ -4,13 +4,27 @@
 
 struct Tile *makeBoard(int count){
 	struct Tile *board = malloc(sizeof(struct Tile) * count);
-
 	int i;
+
 	for (i = 0; i < count; i++){
 		board[i].mark = ' ';
 	}
 
 	return board;
+}
+
+struct Player *makePlayers(int count){
+	struct Player *players = malloc(sizeof(struct Player) * count);
+	int i, j;
+
+	for (i = 0; i < count; i++){
+		players[i].moves = malloc(sizeof(int) * 5);
+		for (j = 0; j <= 5; j++){
+			players[i].moves[j] = -1;
+		} 
+	}
+
+	return players;
 }
 
 void printBoard(struct Tile *board){
@@ -56,29 +70,29 @@ int contains(int needle, int *haystack, int length){
 	return 0;
 }
 
-int checkVictory(int player[]){
-	if (contains(0, player, TICTACTOE_PLAYER_LENGTH)){
-		if ((contains(1, player, TICTACTOE_PLAYER_LENGTH) && contains(2, player, TICTACTOE_PLAYER_LENGTH)) || (contains(3, player, TICTACTOE_PLAYER_LENGTH) && contains(6, player, TICTACTOE_PLAYER_LENGTH)) || (contains(4, player, TICTACTOE_PLAYER_LENGTH) && contains(8, player, TICTACTOE_PLAYER_LENGTH))) {
+int checkVictory(struct Player player){
+	if (contains(0, player.moves, TICTACTOE_PLAYER_LENGTH)){
+		if ((contains(1, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(2, player.moves, TICTACTOE_PLAYER_LENGTH)) || (contains(3, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(6, player.moves, TICTACTOE_PLAYER_LENGTH)) || (contains(4, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(8, player.moves, TICTACTOE_PLAYER_LENGTH))) {
 			return 1;
 		}
 	}
-	if (contains(1, player, TICTACTOE_PLAYER_LENGTH)){
-		if (contains(4, player, TICTACTOE_PLAYER_LENGTH) && contains(7, player, TICTACTOE_PLAYER_LENGTH)){
+	if (contains(1, player.moves, TICTACTOE_PLAYER_LENGTH)){
+		if (contains(4, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(7, player.moves, TICTACTOE_PLAYER_LENGTH)){
 			return 1;
 		}
 	}
-	if (contains(2, player, TICTACTOE_PLAYER_LENGTH)){
-		if ((contains(5, player, TICTACTOE_PLAYER_LENGTH) && contains(8, player, TICTACTOE_PLAYER_LENGTH)) || (contains(4, player, TICTACTOE_PLAYER_LENGTH) && contains(6, player, TICTACTOE_PLAYER_LENGTH))){
+	if (contains(2, player.moves, TICTACTOE_PLAYER_LENGTH)){
+		if ((contains(5, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(8, player.moves, TICTACTOE_PLAYER_LENGTH)) || (contains(4, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(6, player.moves, TICTACTOE_PLAYER_LENGTH))){
 			return 1;
 		}
 	}
-	if (contains(3, player, TICTACTOE_PLAYER_LENGTH)){
-		if (contains(4, player, TICTACTOE_PLAYER_LENGTH) && contains(5, player, TICTACTOE_PLAYER_LENGTH)){
+	if (contains(3, player.moves, TICTACTOE_PLAYER_LENGTH)){
+		if (contains(4, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(5, player.moves, TICTACTOE_PLAYER_LENGTH)){
 			return 1;
 		}
 	}
-	if (contains(6, player, TICTACTOE_PLAYER_LENGTH)){
-		if (contains(7, player, TICTACTOE_PLAYER_LENGTH) && contains(8, player, TICTACTOE_PLAYER_LENGTH)){
+	if (contains(6, player.moves, TICTACTOE_PLAYER_LENGTH)){
+		if (contains(7, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(8, player.moves, TICTACTOE_PLAYER_LENGTH)){
 			return 1;
 		}
 	}
