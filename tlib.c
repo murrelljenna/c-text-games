@@ -59,8 +59,10 @@ int inputMove(int pNo){
 	return index;
 }
 
-int contains(int needle, int *haystack, int length){
+int contains(int needle, int *haystack){
 	int i;
+	size_t length = sizeof(haystack)/sizeof(haystack[0]);
+
 	for (i = 0; i <= length; i++){
 		if (haystack[i] == needle){
 			return 1;
@@ -71,33 +73,43 @@ int contains(int needle, int *haystack, int length){
 }
 
 int checkVictory(struct Player player){
-	if (contains(0, player.moves, TICTACTOE_PLAYER_LENGTH)){
-		if ((contains(1, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(2, player.moves, TICTACTOE_PLAYER_LENGTH)) || (contains(3, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(6, player.moves, TICTACTOE_PLAYER_LENGTH)) || (contains(4, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(8, player.moves, TICTACTOE_PLAYER_LENGTH))) {
+	if (contains(0, player.moves)){
+		if ((contains(1, player.moves) && contains(2, player.moves)) || (contains(3, player.moves) && contains(6, player.moves)) || (contains(4, player.moves) && contains(8, player.moves))) {
 			return 1;
 		}
 	}
-	if (contains(1, player.moves, TICTACTOE_PLAYER_LENGTH)){
-		if (contains(4, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(7, player.moves, TICTACTOE_PLAYER_LENGTH)){
+	if (contains(1, player.moves)){
+		if (contains(4, player.moves) && contains(7, player.moves)){
 			return 1;
 		}
 	}
-	if (contains(2, player.moves, TICTACTOE_PLAYER_LENGTH)){
-		if ((contains(5, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(8, player.moves, TICTACTOE_PLAYER_LENGTH)) || (contains(4, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(6, player.moves, TICTACTOE_PLAYER_LENGTH))){
+	if (contains(2, player.moves)){
+		if ((contains(5, player.moves) && contains(8, player.moves)) || (contains(4, player.moves) && contains(6, player.moves))){
 			return 1;
 		}
 	}
-	if (contains(3, player.moves, TICTACTOE_PLAYER_LENGTH)){
-		if (contains(4, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(5, player.moves, TICTACTOE_PLAYER_LENGTH)){
+	if (contains(3, player.moves)){
+		if (contains(4, player.moves) && contains(5, player.moves)){
 			return 1;
 		}
 	}
-	if (contains(6, player.moves, TICTACTOE_PLAYER_LENGTH)){
-		if (contains(7, player.moves, TICTACTOE_PLAYER_LENGTH) && contains(8, player.moves, TICTACTOE_PLAYER_LENGTH)){
+	if (contains(6, player.moves)){
+		if (contains(7, player.moves) && contains(8, player.moves)){
 			return 1;
 		}
 	}
-
+	
 	return 0;
+}
+
+int checkTie(struct Tile *board){
+	int i, counter;
+	for (i = 0; i < 9; i++){
+		if (board[i].mark == ' '){
+			return 0;
+		}
+	}
+	return 1;
 }
 
 void printArr(int arr[]){

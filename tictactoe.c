@@ -25,11 +25,11 @@ int main(void){
 
 		do {
 			move = inputMove(selector);
-			if (contains(move, players[selector].moves, TICTACTOE_PLAYER_LENGTH) || contains(move, players[other].moves, TICTACTOE_PLAYER_LENGTH) || move < 0 || move > 8){
+			if (contains(move, players[selector].moves) || contains(move, players[other].moves) || move < 0 || move > 8){
 				printf("Invalid move. ");	
 			}	
 
-		} while (contains(move, players[selector].moves, TICTACTOE_PLAYER_LENGTH) || contains(move, players[other].moves, TICTACTOE_PLAYER_LENGTH) || move < 0 || move > 8);
+		} while (contains(move, players[selector].moves) || contains(move, players[other].moves) || move < 0 || move > 8);
 		
 		players[selector].moves[index] = move;
 		board[players[selector].moves[index]].mark = mark;
@@ -41,6 +41,13 @@ int main(void){
 			printf("Player %d wins!\n", selector);
 
 			break;
+		}
+
+		if (checkTie(board)){
+			game_over = 1;
+			
+			printBoard(board);
+			printf("Tie!\n");
 		}
 	
 		selector ^= 1;		
