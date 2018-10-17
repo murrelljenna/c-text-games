@@ -25,16 +25,16 @@ int main(void){
 
 		do {
 			move = inputMove(selector);
-			if (contains(move, players[selector].moves) || contains(move, players[other].moves) || move < 0 || move > 8){
+			if (board[move].mark == 'X' || board[move].mark == 'O' || move < 0 || move > 8){
 				printf("Invalid move. ");	
 			}	
 
-		} while (contains(move, players[selector].moves) || contains(move, players[other].moves) || move < 0 || move > 8);
+		} while (board[move].mark == 'X' || board[move].mark == 'O' || move < 0 || move > 8);
 		
 		players[selector].moves[index] = move;
 		board[players[selector].moves[index]].mark = mark;
 
-		if (checkVictory(players[selector])){
+		if (checkVictory(board, mark)){
 			game_over = 1;
 			
 			printBoard(board);
@@ -48,6 +48,8 @@ int main(void){
 			
 			printBoard(board);
 			printf("Tie!\n");
+			
+			break;
 		}
 	
 		selector ^= 1;		

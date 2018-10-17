@@ -19,6 +19,8 @@ struct Player *makePlayers(int count){
 
 	for (i = 0; i < count; i++){
 		players[i].moves = malloc(sizeof(int) * 5);
+		players[i].moveCount = 5;
+		
 		for (j = 0; j <= 5; j++){
 			players[i].moves[j] = -1;
 		} 
@@ -72,29 +74,29 @@ int contains(int needle, int *haystack){
 	return 0;
 }
 
-int checkVictory(struct Player player){
-	if (contains(0, player.moves)){
-		if ((contains(1, player.moves) && contains(2, player.moves)) || (contains(3, player.moves) && contains(6, player.moves)) || (contains(4, player.moves) && contains(8, player.moves))) {
+int checkVictory(struct Tile *board, char mark){
+	if (board[0].mark == mark){
+		if ((board[1].mark == mark && board[2].mark == mark) || (board[3].mark == mark && board[6].mark == mark) || (board[4].mark == mark && board[8].mark == mark)) {
 			return 1;
 		}
 	}
-	if (contains(1, player.moves)){
-		if (contains(4, player.moves) && contains(7, player.moves)){
+	if (board[1].mark == mark){
+		if (board[4].mark == mark && board[7].mark == mark){
 			return 1;
 		}
 	}
-	if (contains(2, player.moves)){
-		if ((contains(5, player.moves) && contains(8, player.moves)) || (contains(4, player.moves) && contains(6, player.moves))){
+	if (board[2].mark == mark){
+		if ((board[5].mark == mark && board[8].mark == mark) || (board[4].mark == mark && board[6].mark == mark)){
 			return 1;
 		}
 	}
-	if (contains(3, player.moves)){
-		if (contains(4, player.moves) && contains(5, player.moves)){
+	if (board[3].mark == mark){
+		if (board[4].mark == mark && board[5].mark == mark){
 			return 1;
 		}
 	}
-	if (contains(6, player.moves)){
-		if (contains(7, player.moves) && contains(8, player.moves)){
+	if (board[6].mark == mark){
+		if (board[7].mark == mark && board[8].mark == mark){
 			return 1;
 		}
 	}

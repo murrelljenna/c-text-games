@@ -1,9 +1,7 @@
 /*
  * To Do:
  *
- *  - Make contains() function automatically detect size of pointer.
- *	- Eliminate TICTACTOE_PLAYER_LENGTH
- *
+ * - Change player-side victory checking to board-side checking.
  *
  *
  */
@@ -14,7 +12,8 @@ struct Tile{
 };
 
 struct Player{
-	int *moves; 
+	int *moves;
+	int moveCount; 
 };
 
 struct Tile *makeBoard(int count); 
@@ -22,7 +21,7 @@ struct Player *makePlayers(int count);
 void printBoard(struct Tile *board);
 int inputMove(int pNo);
 int contains(int needle, int *haystack);
-int checkVictory(struct Player player);
+int checkVictory(struct Tile *board, char mark);
 int checkTie(struct Tile *board);
 void printArr(int arr[]);
 
