@@ -2,11 +2,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define SIZE 9
+
 int main(void){
 	char mark;
 	int game_over = 0, selector = 0, index = -1, other, move;
 
-	struct Tile *board = makeBoard(9);
+	struct Tile *board = makeBoard(SIZE);
 	struct Player *players = makePlayers(2); 
 	while (game_over == 0){
 		switch(selector){
@@ -21,7 +23,7 @@ int main(void){
 				break;
 		} 		
 		
-		printBoard(board);
+		printBoard(board, SIZE);
 
 		do {
 			move = inputMove(selector);
@@ -37,7 +39,7 @@ int main(void){
 		if (checkVictory(board, mark)){
 			game_over = 1;
 			
-			printBoard(board);
+			printBoard(board, SIZE);
 			printf("Player %d wins!\n", selector);
 
 			break;
@@ -46,7 +48,7 @@ int main(void){
 		if (checkTie(board)){
 			game_over = 1;
 			
-			printBoard(board);
+			printBoard(board, SIZE);
 			printf("Tie!\n");
 			
 			break;

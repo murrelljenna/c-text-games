@@ -1,6 +1,7 @@
 #include "tiles.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 struct Tile *makeBoard(int count){
 	struct Tile *board = malloc(sizeof(struct Tile) * count);
@@ -29,6 +30,49 @@ struct Player *makePlayers(int count){
 	return players;
 }
 
+void printBoard(struct Tile *board, int size){
+	int i, j;
+	double dRows = sqrt((double)size);
+	int rows = (int)dRows;
+
+	printf("   ");
+	for (i = 0; i < rows; i++){
+		printf("   %d    ", i);
+	}
+
+	for (i = 0; i < size; i+=rows){
+		printf("\n   ");
+
+		for (j = 0; j < rows; j++){
+			printf("--------");
+		}
+
+		printf("\n  |");
+		for (j = 0; j < rows; j++){
+			printf("       |");
+		}
+
+		printf("\n%d |", i/rows);
+		for (j = 0; j < rows; j++){
+			printf("   %c   |", board[i+j].mark);	
+		}
+
+		printf("\n  |");
+		for (j = 0; j < rows; j++){
+			printf("       |");
+		}
+		
+	} 
+
+	printf("\n   ");
+	for (j = 0; j < rows; j++){
+		printf("--------");
+	}
+
+	printf("\n");
+	return;
+}
+/*
 void printBoard(struct Tile *board){
 	printf("     0     1     2   \n");
 	printf("   -----------------\n");
@@ -47,7 +91,7 @@ void printBoard(struct Tile *board){
 
 	return;
 }
-
+*/
 int inputMove(int pNo){
 	int input, row, col, index;
 

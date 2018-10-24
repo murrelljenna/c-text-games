@@ -18,7 +18,7 @@ struct Player{
 
 struct Tile *makeBoard(int count); 
 struct Player *makePlayers(int count);
-void printBoard(struct Tile *board);
+void printBoard(struct Tile *board, int size);
 int inputMove(int pNo);
 int contains(int needle, int *haystack);
 int checkVictory(struct Tile *board, char mark);
