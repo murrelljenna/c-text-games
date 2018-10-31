@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #define SIZE 9
 #define PLAYERS 2
@@ -9,16 +10,28 @@
 
 int main(int argc, char *argv[]){
 	char mark, newFile[2] = "-n", filename[50];
-	int game_over = 0, selector = 0, index = -1, other, move;
+	int game_over = 0, user, selector = 0, index = -1, other, move;
+	int userid = getuid();
 	struct Tile *board = makeBoard(SIZE);
 	struct Player *players = makePlayers(2); 
 	
 	if (strcmp(newFile, argv[1]) == 0){
+		user = 0;
+		players[user].userid = userid;
+
 		strcpy(filename, argv[2]);
-		save(filename, board, 0, SIZE);
+		save(players, filename, board, 0, SIZE);
 	}else{
 		strcpy(filename, argv[1]);
+		if(matchPlayers(argv[1], userid) == -1){
+			printf("This game belongs to other players!\n");
+			return 0;
+		}else{
+			user = matchPlayers(argv[1], userid);
+		}
 	}
+
+	players[user].userid = userid;
 
 	while (game_over == 0){
 		switch(selector){
@@ -34,7 +47,7 @@ int main(int argc, char *argv[]){
 		} 		
 	
 		
-		board = updateBoard(4, filename, 10, SIZE);
+		board = updateBoard(6, filename, 10, SIZE);
 	
 		printBoard(board, SIZE);
 
@@ -69,7 +82,7 @@ int main(int argc, char *argv[]){
 	
 		selector ^= 1;
 		
-		save(filename, board, selector, SIZE);
+		save(players, filename, board, selector, SIZE);
 	}
 
 	return 0;

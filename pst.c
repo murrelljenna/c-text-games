@@ -4,16 +4,35 @@
 #include <math.h>
 #include <unistd.h>
 #include <string.h>
-char *getLine(int lineNumber, char filename[], int length){
-	return NULL;
+
+int matchPlayers(char filename[], int userid){
+	FILE* file = fopen(filename, "r");
+	char line[12];
+	int count = 1, i;
+	
+	for (i = 0; i < 2; i++){
+		if (atoi(fgets(line, sizeof line, file)) == userid || atoi(fgets(line, sizeof line, file)) == 0){
+			printf("%s", line);
+			return i;
+		}
+	}
+
+	fclose(file);
+	
+	return -1;
+
 }
 
-int save(char filename[], struct Tile *board, int selector, int size){
+int save(struct Player *players, char filename[], struct Tile *board, int selector, int size){
 	FILE* file = fopen(filename, "w");
+
+	int i;	
+	for (i = 0; i < 2; i++){
+ 		fprintf(file, "%d\n", players[i].userid);
+	}
 	
 	fprintf(file, "%d\n", selector);
 
-	int i;	
 	for (i = 0; i < size; i++){
 		printf("%c", board[i].mark);
 		fprintf(file, "%c", board[i].mark);

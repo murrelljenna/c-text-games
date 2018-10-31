@@ -13,7 +13,8 @@ struct Tile{
 
 struct Player{
 	int *moves;
-	int moveCount; 
+	int moveCount;
+	int userid; 
 };
 
 // Game functions in tlib.c
@@ -30,6 +31,6 @@ void printArr(int arr[]);
 // Reading/writing functions in pst.c
 
 char *getLine(int lineNumber, char filename[], int length);
-int save(char filename[], struct Tile *board, int selector, int size);
+int save(struct Player *players, char filename[], struct Tile *board, int selector, int size);
 struct Tile *updateBoard(int lineNumber, char filename[], int length, int size);
 int getTurn(int lineNumber, char filename[]);
