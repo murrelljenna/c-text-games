@@ -1,17 +1,25 @@
 #include "tiles.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define SIZE 9
 #define PLAYERS 2
 #define GAME "Tic-Tac-Toe"
 
 int main(int argc, char *argv[]){
-	char mark;
+	char mark, newFile[2] = "-n", filename[50];
 	int game_over = 0, selector = 0, index = -1, other, move;
-
 	struct Tile *board = makeBoard(SIZE);
 	struct Player *players = makePlayers(2); 
+	
+	if (strcmp(newFile, argv[1]) == 0){
+		strcpy(filename, argv[2]);
+		save(filename, board, 0, SIZE);
+	}else{
+		strcpy(filename, argv[1]);
+	}
+
 	while (game_over == 0){
 		switch(selector){
 			case 0:
@@ -26,7 +34,7 @@ int main(int argc, char *argv[]){
 		} 		
 	
 		
-		board = updateBoard(4, argv[1], 10, SIZE);
+		board = updateBoard(4, filename, 10, SIZE);
 	
 		printBoard(board, SIZE);
 
@@ -61,7 +69,7 @@ int main(int argc, char *argv[]){
 	
 		selector ^= 1;
 		
-		save(argv[1], board, 0, SIZE);
+		save(filename, board, selector, SIZE);
 	}
 
 	return 0;
