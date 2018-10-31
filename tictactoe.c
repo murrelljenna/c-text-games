@@ -6,33 +6,7 @@
 #define PLAYERS 2
 #define GAME "Tic-Tac-Toe"
 
-int gameMenu(void){
-	char game[] = GAME;
-	int selection;
-
-	printf("Welcome to %s. Please select a menu option:\n", game);
-	printf("1. New Game\n");
-	printf("2. Load Game\n");
-	printf("0. Exit\n\n");
-	scanf("%d", &selection);
-
-	return selection;
-}
-
-
-int main(void){
-	int selection = gameMenu();
-	switch(selection){
-		case 0:
-			printf("Case 0");
-			break;
-		case 1:
-			printf("Case 1");
-		case 2:
-			printf("Case 2");
-			break;
-	}
-
+int main(int argc, char *argv[]){
 	char mark;
 	int game_over = 0, selector = 0, index = -1, other, move;
 
@@ -52,7 +26,7 @@ int main(void){
 		} 		
 	
 		
-		board = updateBoard(4, "save.txt", 10, SIZE);
+		board = updateBoard(4, argv[1], 10, SIZE);
 	
 		printBoard(board, SIZE);
 
@@ -87,7 +61,7 @@ int main(void){
 	
 		selector ^= 1;
 		
-		save("save.txt", board, 0, SIZE);
+		save(argv[1], board, 0, SIZE);
 	}
 
 	return 0;

@@ -15,6 +15,7 @@ int save(char filename[], struct Tile *board, int selector, int size){
 
 	int i;	
 	for (i = 0; i < size; i++){
+		printf("%c", board[i].mark);
 		fprintf(file, "%c", board[i].mark);
 	}
 
