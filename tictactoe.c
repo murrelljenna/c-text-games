@@ -9,13 +9,14 @@
 #define GAME "Tic-Tac-Toe"
 
 int main(int argc, char *argv[]){
-	char mark, newFile[2] = "-n", filename[50];
+	char mark, newFile[2] = "-n", filename[50], userInput[10];
 	int game_over = 0, user, selector = 0, index = -1, other, move;
 	int userid = getuid();
 	struct Tile *board = makeBoard(SIZE);
 	struct Player *players = makePlayers(2); 
 	
 	if (strcmp(newFile, argv[1]) == 0){
+		printf("rar");
 		user = 0;
 		players[user].userid = userid;
 
@@ -32,9 +33,10 @@ int main(int argc, char *argv[]){
 	}
 
 	players[user].userid = userid;
-
+	selector = getTurn(3, filename);
+	
 	while (game_over == 0){
-		switch(selector){
+		switch(user){
 			case 0:
 				mark = 'X';
 				other = 1;
@@ -46,10 +48,16 @@ int main(int argc, char *argv[]){
 				break;
 		} 		
 	
-		
+		players[other].userid = matchOtherPlayer(filename, userid);
+
 		board = updateBoard(6, filename, 10, SIZE);
-	
 		printBoard(board, SIZE);
+
+		
+		while (getTurn(3, filename) != user){
+			printf("\nPlayer %d, please wait for your turn to begin.\n\n", user);
+			scanf("%s", &userInput);
+		}
 
 		do {
 			move = inputMove(selector);

@@ -8,17 +8,37 @@
 int matchPlayers(char filename[], int userid){
 	FILE* file = fopen(filename, "r");
 	char line[12];
-	int count = 1, i;
+	int i = 0;
 	
-	for (i = 0; i < 2; i++){
-		if (atoi(fgets(line, sizeof line, file)) == userid || atoi(fgets(line, sizeof line, file)) == 0){
-			printf("%s", line);
+	while (fgets(line, sizeof line, file) != NULL || i < 2){
+		if (atoi(line) == userid || atoi(line) == 0){
 			return i;
 		}
+		i++;
 	}
 
 	fclose(file);
 	
+	return -1;
+
+}
+
+int matchOtherPlayer(char filename[], int userid){
+	FILE* file = fopen(filename, "r");
+	char line[12];
+	int i = 0;
+	
+	while (fgets(line, sizeof line, file) != NULL || i < 2){
+		if (atoi(line) != userid || atoi(line) != 0){
+			printf("Return: %s, Index: %d", line, i);
+			fclose(file);
+			return atoi(line);
+		}
+		i++;
+	}
+
+	fclose(file);
+
 	return -1;
 
 }
@@ -34,7 +54,6 @@ int save(struct Player *players, char filename[], struct Tile *board, int select
 	fprintf(file, "%d\n", selector);
 
 	for (i = 0; i < size; i++){
-		printf("%c", board[i].mark);
 		fprintf(file, "%c", board[i].mark);
 	}
 
