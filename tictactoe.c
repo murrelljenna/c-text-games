@@ -11,7 +11,9 @@
 int main(int argc, char *argv[]){
 	char mark, newFile[2] = "-n", filename[50], userInput[10];
 	int game_over = 0, user, selector = 0, index = -1, other, move;
-	int userid = getuid();
+	int userid;// = getuid();
+	scanf("%d", &userid);
+
 	struct Tile *board = makeBoard(SIZE);
 	struct Player *players = makePlayers(2); 
 	
@@ -47,16 +49,16 @@ int main(int argc, char *argv[]){
 				other = 0;
 				break;
 		} 		
-	
-		players[other].userid = matchOtherPlayer(filename, userid);
-
+		if (matchOtherPlayer(filename, userid) != -1){
+			players[other].userid = matchOtherPlayer(filename, userid);
+		}	
+		
 		board = updateBoard(6, filename, 10, SIZE);
 		printBoard(board, SIZE);
-
 		
 		while (getTurn(3, filename) != user){
-			printf("\nPlayer %d, please wait for your turn to begin.\n\n", user);
-			scanf("%s", &userInput);
+			printf("\nIt is not your turn player %d. Press any key to refresh game.\n\n", user);
+			getchar();
 		}
 
 		do {
@@ -74,8 +76,11 @@ int main(int argc, char *argv[]){
 			game_over = 1;
 			
 			printBoard(board, SIZE);
-			printf("Player %d wins!\n", selector);
+			printf("Player %d wins!\n\n", selector);
+			save(players, filename, board, selector, SIZE);
 
+			//printf("Play again? (Y/N): ");
+			//scanf
 			break;
 		}
 
@@ -83,8 +88,9 @@ int main(int argc, char *argv[]){
 			game_over = 1;
 			
 			printBoard(board, SIZE);
-			printf("Tie!\n");
-			
+			printf("Tie!\n");			
+			save(players, filename, board, selector, SIZE);
+
 			break;
 		}
 	
