@@ -10,8 +10,9 @@ int matchPlayers(char filename[], int userid){
 	char line[12];
 	int i = 0;
 	
-	while (fgets(line, sizeof line, file) != NULL || i < 2){
+	while (fgets(line, sizeof line, file) != NULL && i < 2){
 		if (atoi(line) == userid || atoi(line) == 0){
+			printf("Return: %s, Index: %d", line, i);
 			return i;
 		}
 		i++;

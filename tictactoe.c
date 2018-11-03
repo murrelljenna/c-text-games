@@ -6,15 +6,14 @@
 
 #define SIZE 9
 #define PLAYERS 2
-#define GAME "Tic-Tac-Toe"
 
 int main(int argc, char *argv[]){
 	char mark, newFile[2] = "-n", filename[50], idleInput[10], userWin, otherWin, otherMark;
 	int game_over = 0, user, selector = 0, index = -1, other, move, winner;
-	int userid;// = getuid();
-	char buffer[10];
-	fgets(buffer, 9, stdin);
-	sscanf(buffer, "%d", &userid);
+	int userid = getuid();
+	//char buffer[10];
+	//fgets(buffer, 9, stdin);
+	//sscanf(buffer, "%d", &userid);
 
 	struct Tile *board = makeBoard(SIZE);
 	struct Player *players = makePlayers(2); 
@@ -28,7 +27,7 @@ int main(int argc, char *argv[]){
 	}else{
 		strcpy(filename, argv[1]);
 		if(matchPlayers(argv[1], userid) == -1){
-			printf("This game belongs to other players!\n");
+			printf("\nThis game is full.\n\n");
 			return 0;
 		}else{
 			user = matchPlayers(argv[1], userid);
