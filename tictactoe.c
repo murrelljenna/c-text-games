@@ -9,10 +9,12 @@
 #define GAME "Tic-Tac-Toe"
 
 int main(int argc, char *argv[]){
-	char mark, newFile[2] = "-n", filename[50], userInput[10];
+	char mark, newFile[2] = "-n", filename[50], idleInput[10];
 	int game_over = 0, user, selector = 0, index = -1, other, move;
 	int userid;// = getuid();
-	scanf("%d", &userid);
+	char buffer[10];
+	fgets(buffer, 9, stdin);
+	sscanf(buffer, "%d", &userid);
 
 	struct Tile *board = makeBoard(SIZE);
 	struct Player *players = makePlayers(2); 
@@ -49,17 +51,20 @@ int main(int argc, char *argv[]){
 				other = 0;
 				break;
 		} 		
+
 		if (matchOtherPlayer(filename, userid) != -1){
 			players[other].userid = matchOtherPlayer(filename, userid);
-		}	
+		}			
 		
-		board = updateBoard(6, filename, 10, SIZE);
-		printBoard(board, SIZE);
-		
-		while (getTurn(3, filename) != user){
-			printf("\nIt is not your turn player %d. Press any key to refresh game.\n\n", user);
-			getchar();
-		}
+		do {
+			board = updateBoard(6, filename, 10, SIZE);
+			printBoard(board, SIZE);
+			if (getTurn(3, filename) != user){
+				printf("\nIt is not your turn player %d. Press <ENTER> to refresh game.\n\n", user);
+				fflush(stdin);
+				fgets(idleInput, 9, stdin);
+			}
+		} while (getTurn(3, filename) != user);
 
 		do {
 			move = inputMove(selector);
