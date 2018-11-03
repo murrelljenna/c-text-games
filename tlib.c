@@ -35,7 +35,7 @@ void printBoard(struct Tile *board, int size){
 	double dRows = sqrt((double)size);
 	int rows = (int)dRows;
 
-	printf("   ");
+	printf("\n   ");
 	for (i = 0; i < rows; i++){
 		printf("   %d    ", i);
 	}
@@ -72,31 +72,13 @@ void printBoard(struct Tile *board, int size){
 	printf("\n");
 	return;
 }
-/*
-void printBoard(struct Tile *board){
-	printf("     0     1     2   \n");
-	printf("   -----------------\n");
-	printf("  |     |     |     |\n");
-	printf("0 |  %c  |  %c  |  %c  |\n", board[0].mark, board[1].mark, board[2].mark);
-	printf("  |     |     |     |\n");
-	printf("   -----------------\n");
-	printf("  |     |     |     |\n");
-	printf("1 |  %c  |  %c  |  %c  |\n", board[3].mark, board[4].mark, board[5].mark);
-	printf("  |     |     |     |\n");
-	printf("   -----------------\n");
-	printf("  |     |     |     |\n");
-	printf("2 |  %c  |  %c  |  %c  |\n", board[6].mark, board[7].mark, board[8].mark);
-	printf("  |     |     |     |\n");
-	printf("   -----------------\n");
 
-	return;
-}
-*/
 int inputMove(int pNo){
 	int input, row, col, index;
+	char garbage;
 
-	printf("Player %d, please input your column & row (CR): ", pNo);
-	scanf("%d", &input);
+	printf("\nPlayer %d, please input your column & row (CR): ", pNo);
+	scanf("%d%c", &input, &garbage);
 
 	col = input/10;
 	row = input%10;
