@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[]){
 	char mark, newFile[2] = "-n", filename[50], idleInput[10], userWin, otherWin, otherMark;
-	int game_over = 0, user, selector = 0, index = -1, other, move, winner, otherId = 0;
+	int game_over = 0, user, selector = 0, index = -1, other, move, winner, tempId = 0, otherId = 0;
 	int userid = getuid();
 	
 	if (argc == 1){
@@ -33,11 +33,12 @@ int main(int argc, char *argv[]){
 	}else{
 		strcpy(filename, argv[1]);
 		if (fileExists(filename)){
-			if(matchPlayers(argv[1], userid) == -1){
+			tempId = matchPlayers(argv[1], userid);
+			if(tempId == -1){
 				printf("\nThis game is full.\n\n");
 				return 0;
 			}else{
-				user = matchPlayers(argv[1], userid);
+				user = tempId;
 			}
 		}else{
 			printf("Save file not found.\nUsage: ./tictactoe [-n] [<filename>]\nUse [-n] to create new file, omit to load existing file\n");
