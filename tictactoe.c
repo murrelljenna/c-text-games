@@ -96,6 +96,10 @@ int main(int argc, char *argv[]){
 
 		} while (getTurn(3, filename) != user);
 
+		board = updateBoard(6, filename, 10, SIZE);
+		printBoard(board, SIZE);
+		selector = getTurn(3, filename);
+
 		do {
 			move = inputMove(selector);
 			if (board[move].mark == 'X' || board[move].mark == 'O' || move < 0 || move > 8){
