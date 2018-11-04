@@ -12,6 +12,11 @@ int main(int argc, char *argv[]){
 	int game_over = 0, user, selector = 0, index = -1, other, move, winner;
 	int userid = getuid();
 	
+	if (argc == 1){
+		printf("Save file required.\nUsage: ./tictactoe [-n] [<filename>]\nUse [-n] to create new file, omit to load existing file\n");
+		return 0;
+	}	
+
 	//char buffer[10];
 	//fgets(buffer, 9, stdin);
 	//sscanf(buffer, "%d", &userid);
@@ -27,11 +32,15 @@ int main(int argc, char *argv[]){
 		save(players, filename, board, 0, SIZE);
 	}else{
 		strcpy(filename, argv[1]);
-		if(matchPlayers(argv[1], userid) == -1){
-			printf("\nThis game is full.\n\n");
-			return 0;
+		if (fileExists(filename)){
+			if(matchPlayers(argv[1], userid) == -1){
+				printf("\nThis game is full.\n\n");
+				return 0;
+			}else{
+				user = matchPlayers(argv[1], userid);
+			}
 		}else{
-			user = matchPlayers(argv[1], userid);
+			printf("Save file not found.\nUsage: ./tictactoe [-n] [<filename>]\nUse [-n] to create new file, omit to load existing file\n");
 		}
 	}
 

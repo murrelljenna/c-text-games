@@ -5,6 +5,16 @@
 #include <unistd.h>
 #include <string.h>
 
+int fileExists(const char * filename){
+    /* try to open file to read */
+    FILE *file;
+    if (file = fopen(filename, "r")){
+        fclose(file);
+        return 1;
+    }
+    return 0;
+}
+
 int matchPlayers(char filename[], int userid){
 	FILE* file = fopen(filename, "r");
 	char line[12];
@@ -13,6 +23,7 @@ int matchPlayers(char filename[], int userid){
 	while (fgets(line, sizeof line, file) != NULL && i < 2){
 		if (atoi(line) == userid || atoi(line) == 0){
 	//		printf("Return: %s, Index: %d", line, i);
+			fclose(file);
 			return i;
 		}
 		i++;
