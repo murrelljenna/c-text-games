@@ -42,7 +42,7 @@ int matchOtherPlayer(char filename[], int userid){
 	
 	while (fgets(line, sizeof line, file) != NULL && i < 2){
 		if (atoi(line) != userid && atoi(line) != 0){
-			printf("Return: %s, Index: %d", line, i);
+		//	printf("Return: %s, Index: %d", line, i);
 			fclose(file);
 			return atoi(line);
 		}
