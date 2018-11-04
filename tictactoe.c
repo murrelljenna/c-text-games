@@ -11,6 +11,7 @@ int main(int argc, char *argv[]){
 	char mark, newFile[2] = "-n", filename[50], idleInput[10], userWin, otherWin, otherMark;
 	int game_over = 0, user, selector = 0, index = -1, other, move, winner;
 	int userid = getuid();
+	
 	//char buffer[10];
 	//fgets(buffer, 9, stdin);
 	//sscanf(buffer, "%d", &userid);
@@ -56,49 +57,69 @@ int main(int argc, char *argv[]){
 			players[other].userid = matchOtherPlayer(filename, userid);
 		}			
 		
-		do {
-			board = updateBoard(6, filename, 10, SIZE);
-		
-			// Check if game is won or tied
+		// First round of checking if game is won or tied.
 
-			userWin = checkVictory(board, mark);
-			otherWin = checkVictory(board, otherMark);
-			if (userWin || otherWin){
-				game_over = 1;	
-				printBoard(board, SIZE);
-				winner = (userWin == 1) ? user : other;
-				printf("\nPlayer %d wins!\n\n", winner);
-				save(players, filename, board, selector, SIZE);
+		board = updateBoard(6, filename, 10, SIZE);
 
-				//printf("Play again? (Y/N): ");
-				//scanf
-				return 0;
-			}
-
-			if (checkTie(board)){
-				game_over = 1;
-				
-				printBoard(board, SIZE);
-				printf("\nTie!\n");			
-				save(players, filename, board, selector, SIZE);
-
-				return 0;
-			}
-
-			// If not won or tied, move on to checking whose turn
-
+		userWin = checkVictory(board, mark);
+		otherWin = checkVictory(board, otherMark);
+		if (userWin || otherWin){
+			game_over = 1;	
 			printBoard(board, SIZE);
-			if (getTurn(3, filename) != user){
-				printf("\nIt is not your turn player %d. Press <ENTER> to refresh game: ", user);
-				fflush(stdin);
-				fgets(idleInput, 9, stdin);
-			}
+			winner = (userWin == 1) ? user : other;
+			printf("\nPlayer %d wins!\n\n", winner);
+			save(players, filename, board, selector, SIZE);
 
-		} while (getTurn(3, filename) != user);
+			return 0;
+		}
 
+		if (checkTie(board)){
+			game_over = 1;
+			
+			printBoard(board, SIZE);
+			printf("\nTie!\n");			
+			save(players, filename, board, selector, SIZE);
+
+			return 0;
+		}
+
+		// If no victory yet, check if game has been updated
+
+		while (getTurn(3, filename) != user) {
+			printBoard(board, SIZE);
+	
+			printf("\nIt is not your turn player %d. Press <ENTER> to refresh game: ", user);
+			fflush(stdin);
+			fgets(idleInput, 9, stdin);
+		}
+		
+		// Once game has been returned to user, check board for victories again
+	
 		board = updateBoard(6, filename, 10, SIZE);
 		printBoard(board, SIZE);
 		selector = getTurn(3, filename);
+
+		userWin = checkVictory(board, mark);
+		otherWin = checkVictory(board, otherMark);
+		if (userWin || otherWin){
+			game_over = 1;	
+			printBoard(board, SIZE);
+			winner = (userWin == 1) ? user : other;
+			printf("\nPlayer %d wins!\n\n", winner);
+			save(players, filename, board, selector, SIZE);
+
+			return 0;
+		}
+
+		if (checkTie(board)){
+			game_over = 1;
+			
+			printBoard(board, SIZE);
+			printf("\nTie!\n");			
+			save(players, filename, board, selector, SIZE);
+
+			return 0;
+		}
 
 		do {
 			move = inputMove(selector);
