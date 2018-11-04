@@ -30,6 +30,9 @@ void printArr(int arr[]);
 
 // Reading/writing functions in pst.c
 
+int fileExists(const char * filename);
+int matchPlayers(char filename[], int userid);
+int matchOtherPlayer(char filename[], int userid);
 char *getLine(int lineNumber, char filename[], int length);
 int save(struct Player *players, char filename[], struct Tile *board, int selector, int size);
 struct Tile *updateBoard(int lineNumber, char filename[], int length, int size);
