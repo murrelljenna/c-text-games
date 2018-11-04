@@ -96,7 +96,6 @@ int main(int argc, char *argv[]){
 		// Once game has been returned to user, check board for victories again
 	
 		board = updateBoard(6, filename, 10, SIZE);
-		printBoard(board, SIZE);
 		selector = getTurn(3, filename);
 
 		userWin = checkVictory(board, mark);
@@ -120,6 +119,8 @@ int main(int argc, char *argv[]){
 
 			return 0;
 		}
+
+		printBoard(board, SIZE);
 
 		do {
 			move = inputMove(selector);
