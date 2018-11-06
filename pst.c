@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <string.h>
 
+
+
 int fileExists(const char * filename){
     /* try to open file to read */
     FILE *file;
@@ -55,18 +57,20 @@ int matchOtherPlayer(char filename[], int userid){
 
 }
 
-int save(struct Player *players, char filename[], struct Tile *board, int selector, int size){
+int save(struct Player *players, char filename[], struct Tile **boards, int selector, int size, int BOARDS){
 	FILE* file = fopen(filename, "w");
 
-	int i;	
+	int i, j;	
 	for (i = 0; i < 2; i++){
  		fprintf(file, "%d\n", players[i].userid);
 	}
 	
 	fprintf(file, "%d\n", selector);
-
-	for (i = 0; i < size; i++){
-		fprintf(file, "%c", board[i].mark);
+	
+	for (i = 0; i < BOARDS; i++){
+		for (j = 0; j < size; j++){
+			fprintf(file, "%c", boards[i][j].mark);
+		}
 	}
 
 	fclose(file);

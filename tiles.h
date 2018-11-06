@@ -34,6 +34,6 @@ int fileExists(const char * filename);
 int matchPlayers(char filename[], int userid);
 int matchOtherPlayer(char filename[], int userid);
 char *getLine(int lineNumber, char filename[], int length);
-int save(struct Player *players, char filename[], struct Tile *board, int selector, int size);
+int save(struct Player *players, char filename[], struct Tile **boards, int selector, int size, int BOARDS);
 struct Tile *updateBoard(int lineNumber, char filename[], int length, int size);
 int getTurn(int lineNumber, char filename[]);

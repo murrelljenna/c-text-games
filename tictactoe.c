@@ -6,7 +6,7 @@
 
 #define SIZE 9
 #define PLAYERS 2
-
+#define BOARDS 1
 int main(int argc, char *argv[]){
 	char mark, newFile[2] = "-n", filename[50], idleInput[10], userWin, otherWin, otherMark;
 	int game_over = 0, user, selector = 0, index = -1, other, move, winner, tempId = 0, otherId = 0;
@@ -21,7 +21,9 @@ int main(int argc, char *argv[]){
 	//fgets(buffer, 9, stdin);
 	//sscanf(buffer, "%d", &userid);
 
-	struct Tile *board = makeBoard(SIZE);
+	struct Tile **boards = malloc((sizeof(struct Tile) * SIZE) * BOARDS);
+	boards[0] = makeBoard(SIZE);
+	
 	struct Player *players = makePlayers(2); 
 	
 	if (strcmp(newFile, argv[1]) == 0){
@@ -29,7 +31,7 @@ int main(int argc, char *argv[]){
 		players[user].userid = userid;
 
 		strcpy(filename, argv[2]);
-		save(players, filename, board, 0, SIZE);
+		save(players, filename, boards, 0, SIZE, BOARDS);
 	}else{
 		strcpy(filename, argv[1]);
 		if (fileExists(filename)){
@@ -70,26 +72,26 @@ int main(int argc, char *argv[]){
 		
 		// First round of checking if game is won or tied.
 
-		board = updateBoard(6, filename, 10, SIZE);
+		boards[0] = updateBoard(6, filename, 10, SIZE);
 
-		userWin = checkVictory(board, mark);
-		otherWin = checkVictory(board, otherMark);
+		userWin = checkVictory(boards[0], mark);
+		otherWin = checkVictory(boards[0], otherMark);
 		if (userWin || otherWin){
 			game_over = 1;	
-			printBoard(board, SIZE);
+			printBoard(boards[0], SIZE);
 			winner = (userWin == 1) ? user : other;
 			printf("\nPlayer %d wins!\n\n", winner);
-			save(players, filename, board, selector, SIZE);
+			save(players, filename, boards, selector, SIZE, BOARDS);
 
 			return 0;
 		}
 
-		if (checkTie(board)){
+		if (checkTie(boards[0])){
 			game_over = 1;
 			
-			printBoard(board, SIZE);
+			printBoard(boards[0], SIZE);
 			printf("\nTie!\n");			
-			save(players, filename, board, selector, SIZE);
+			save(players, filename, boards, selector, SIZE, BOARDS);
 
 			return 0;
 		}
@@ -97,56 +99,56 @@ int main(int argc, char *argv[]){
 		// If no victory yet, check if game has been updated
 
 		while (getTurn(3, filename) != user) {
-			printBoard(board, SIZE);
+			printBoard(boards[0], SIZE);
 	
 			printf("\nIt is not your turn player %d. Press <ENTER> to refresh game: ", user);
 			fflush(stdin);
 			fgets(idleInput, 9, stdin);
 		}
 		
-		// Once game has been returned to user, check board for victories again
+		// Once game has been returned to user, check boards[0] for victories again
 	
-		board = updateBoard(6, filename, 10, SIZE);
+		boards[0] = updateBoard(6, filename, 10, SIZE);
 		selector = getTurn(3, filename);
 
-		userWin = checkVictory(board, mark);
-		otherWin = checkVictory(board, otherMark);
+		userWin = checkVictory(boards[0], mark);
+		otherWin = checkVictory(boards[0], otherMark);
 		if (userWin || otherWin){
 			game_over = 1;	
-			printBoard(board, SIZE);
+			printBoard(boards[0], SIZE);
 			winner = (userWin == 1) ? user : other;
 			printf("\nPlayer %d wins!\n\n", winner);
-			save(players, filename, board, selector, SIZE);
+			save(players, filename, boards, selector, SIZE, BOARDS);
 
 			return 0;
 		}
 
-		if (checkTie(board)){
+		if (checkTie(boards[0])){
 			game_over = 1;
 			
-			printBoard(board, SIZE);
+			printBoard(boards[0], SIZE);
 			printf("\nTie!\n");			
-			save(players, filename, board, selector, SIZE);
+			save(players, filename, boards, selector, SIZE, BOARDS);
 
 			return 0;
 		}
 
-		printBoard(board, SIZE);
+		printBoard(boards[0], SIZE);
 
 		do {
 			move = inputMove(selector);
-			if (board[move].mark == 'X' || board[move].mark == 'O' || move < 0 || move > 8){
+			if (boards[0][move].mark == 'X' || boards[0][move].mark == 'O' || move < 0 || move > 8){
 				printf("Invalid move. ");	
 			}	
 
-		} while (board[move].mark == 'X' || board[move].mark == 'O' || move < 0 || move > 8);
+		} while (boards[0][move].mark == 'X' || boards[0][move].mark == 'O' || move < 0 || move > 8);
 		
 		players[selector].moves[index] = move;
-		board[players[selector].moves[index]].mark = mark;
+		boards[0][players[selector].moves[index]].mark = mark;
 
 		selector ^= 1;
 		
-		save(players, filename, board, selector, SIZE);
+		save(players, filename, boards, selector, SIZE, BOARDS);
 	}
 
 	return 0;
