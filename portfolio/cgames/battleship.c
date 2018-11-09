@@ -22,7 +22,8 @@ int main(int argc, char *argv[]){
 
 		// Validity check successfull
 
-		int user, selector = 0, tempId, otherId, game_over = 0, i, player, j, move, other;	
+		int user, selector = 0, tempId, otherId, game_over = 0, i, player, j, move, other, input;
+		int increment, offset;	
 		int ships[5] = {2, 3, 3, 4, 5};
 		int userid = getuid();
 		char filename[25];
@@ -82,11 +83,39 @@ int main(int argc, char *argv[]){
 			for (player = 0; player<PLAYERS; player++) {
 				printf("\n\nPlayer %d, please begin placing your ships\n", player);
 				
-				for (j = 0; j < SHIPS; j++){
-					printf("\nPlease input the column/row of ship %d of %d (C/R): ", j, SHIPS);
+				for (j = 1; j <= SHIPS; j++){
+					printf("\nPlease input starting column/row of ship %d of %d (C/R): ", j, SHIPS);
 					move = inputMove(selector, SIZE); 
-					boards[3][move].mark = ship;
+					boards[user][move].mark = ship;
 
+					printf("\nThis ship is %d tiles long. Please input direction (N/S/E/W): ", ships[j]);
+					scanf("%c%*c", &input);
+					offset = 0;
+					increment = 0;
+
+					switch (input){
+						case 'N':
+						case 'n':
+							increment = -10;
+							break;
+						case 'S':
+						case 's':
+							increment = 10;
+							break;
+						case 'E':
+						case 'e':
+							increment = 1;
+							break;
+						case 'W':
+						case 'w':
+							increment = -1;
+							break;
+					}
+				
+					for (i = 2; i <= ships[j]; i++){
+						offset+=increment;
+						boards[user][move+offset].mark = ship;
+					}
 					for (i = 0; i < BOARDS; i++){
 						printBoard(boards[i], SIZE);
 					}
