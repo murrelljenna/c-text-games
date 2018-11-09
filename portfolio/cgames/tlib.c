@@ -150,4 +150,14 @@ void printArr(int arr[]){
 	return;
 }
 
+int countTiles(struct Tile *board, char c, int SIZE){
+	int i, count = 0;
+	for (i = 0; i<SIZE; i++){
+		if (board[i].mark == c){
+			count++;
+		}
+	}
+	return count;
+}
+
 

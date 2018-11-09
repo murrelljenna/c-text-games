@@ -37,3 +37,4 @@ char *getLine(int lineNumber, char filename[], int length);
 int save(struct Player *players, char filename[], struct Tile **boards, int selector, int size, int BOARDS);
 struct Tile **updateBoard(char filename[], int SIZE, int BOARDS);
 int getTurn(int lineNumber, char filename[]);
+int countTiles(struct Tile *board, char c, int SIZE);
