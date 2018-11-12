@@ -160,4 +160,12 @@ int countTiles(struct Tile *board, char c, int SIZE){
 	return count;
 }
 
+void freeBoards(struct Tile **boards, int BOARDS){
+	int i;
+	for (i = 0; i < BOARDS; i++){
+		free(boards[i]);
+	}
 
+	free(boards);
+	return;
+}

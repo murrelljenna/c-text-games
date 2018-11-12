@@ -22,9 +22,9 @@ int main(int argc, char *argv[]){
 
 		// Validity check successfull
 
-		int user, selector = 0, tempId, otherId, game_over = 0, i, player, j, move, other, input;
+		int user, selector = 0, tempId, otherId, game_over = 0, i, player, j, move, other, input, invalid;
 		int increment, offset, markCount, resume;
-		int ships[5] = {2, 3, 3, 4, 5};
+		int ships[5] = {2, 3, 3, 4, 5}, buffer[5];
 		int userid = getuid();
 		char filename[25];
 
@@ -36,6 +36,12 @@ int main(int argc, char *argv[]){
 		boards[1] = makeBoard(SIZE);
 		boards[2] = makeBoard(SIZE);
 		boards[3] = makeBoard(SIZE);
+	
+		struct Tile **boardBuffer = malloc((sizeof(struct Tile) * SIZE) * BOARDS);
+		boardBuffer[0] = makeBoard(SIZE);
+		boardBuffer[1] = makeBoard(SIZE);
+		boardBuffer[2] = makeBoard(SIZE);
+		boardBuffer[3] = makeBoard(SIZE);
 
 		// Starting new game or slotting player into existing game
 
@@ -82,6 +88,7 @@ int main(int argc, char *argv[]){
 
 			markCount = countTiles(boards[user], ship, SIZE) + countTiles(boards[user], hit, SIZE);
 			if (markCount < 17){
+				resume = 1;
 				if (markCount < 2){
 					resume = 1;
 				} else if (markCount < 5 && markCount >= 2){
@@ -95,37 +102,70 @@ int main(int argc, char *argv[]){
 				}
 
 				for (j = resume; j <= SHIPS; j++){
-					printf("\nPlease input starting column/row of ship %d of %d (C/R): ", j, SHIPS);
-					move = inputMove(selector, SIZE); 
+					do {
+						printf("Please input starting column/row of ship %d of %d (C/R): ", j, SHIPS);
+						move = inputMove(selector, SIZE); 
+						if (move < 0 || move > SIZE || boards[user][move].mark == ship){
+							printf("\nInvalid move. ");
+						}
+					} while (move < 0 || move > SIZE || boards[user][move].mark == ship);
 					boards[user][move].mark = ship;
 
-					printf("\nThis ship is %d tiles long. Please input direction (N/S/E/W): ", ships[j]);
-					scanf("%c%*c", &input);
-					offset = 0;
+					do {
+						printf("This ship is %d tiles long. Please input direction (N/S/E/W): ", ships[j]);
+						scanf("%c%*c", &input);
+						offset = 0;
+						invalid = 0;
 
-					switch (input){
-						case 'N':
-						case 'n':
-							increment = -10;
-							break;
-						case 'S':
-						case 's':
-							increment = 10;
-							break;
-						case 'E':
-						case 'e':
-							increment = 1;
-							break;
-						case 'W':
-						case 'w':
-							increment = -1;
-							break;
-					}
-				
-					for (i = 2; i <= ships[j-1]; i++){
-						offset+=increment;
-						boards[user][move+offset].mark = ship;
-					}
+						switch (input){
+							case 'N':
+							case 'n':
+								increment = -10;
+								break;
+							case 'S':
+							case 's':
+								increment = 10;
+								break;
+							case 'E':
+							case 'e':
+								increment = 1;
+								break;
+							case 'W':
+							case 'w':
+								increment = -1;
+								break;
+							default:
+								printf("Invalid entry.");
+								invalid = 1;
+								break;
+						}
+						
+						if (invalid == 0){
+							for (i = 2; i <= ships[j-1]; i++){
+								offset+=increment;
+								if (offset < 0 || offset > SIZE || boards[user][offset].mark == ship){
+									invalid = 1;
+									printf("Invalid move. ");
+									break;
+								} else {
+									buffer[i-2] = offset;
+								}
+							}
+							
+							if (invalid == 0){
+								for (i = 2; i <= ships[j-1]; i++){
+									printf("%d", offset);
+									boards[user][buffer[i-2]].mark = ship;
+								}
+							}
+						}	
+					} while (invalid == 1);
+
+					// Ship placement successfull
+
+					boardBuffer = updateBoard(filename, SIZE, BOARDS);
+					boards[other] = boardBuffer[other];
+					boards[other+2] = boardBuffer[other+2];
 
 					save(players, filename, boards, 0, SIZE, BOARDS);
 					
@@ -134,11 +174,16 @@ int main(int argc, char *argv[]){
 					}
 				}
 			}
-			//selector ^= 1;
+			
+			// Game starts here
+			
+				
+			selector ^= 1;
 			game_over = 1;
 		}
-
-		free(boards);
+		
+		freeBoards(boards, BOARDS);
+		free(players);
 	}
 	
 	return 0;

@@ -38,3 +38,4 @@ int save(struct Player *players, char filename[], struct Tile **boards, int sele
 struct Tile **updateBoard(char filename[], int SIZE, int BOARDS);
 int getTurn(int lineNumber, char filename[]);
 int countTiles(struct Tile *board, char c, int SIZE);
+void freeBoards(struct Tile **boards, int BOARDS);
