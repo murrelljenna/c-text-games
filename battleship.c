@@ -23,6 +23,7 @@ int main(int argc, char *argv[]){
 		// Validity check successfull
 
 		int user, selector = 0, tempId, otherId, game_over = 0, i, player, j, move, other, input, invalid;
+		char direction;
 		int increment, offset, markCount, resume;
 		int ships[5] = {2, 3, 3, 4, 5}, buffer[5];
 		int userid = getuid();
@@ -110,13 +111,13 @@ int main(int argc, char *argv[]){
 					boards[user][move].mark = ship;
 
 					do {
-						printf("This ship is %d tiles long. Please input direction (N/S/E/W): ", ships[j]);
-						scanf("%c%*c", &input);
-						printf("%c", input);
+						printf("This ship is %d tiles long. Please direction direction (N/S/E/W): ", ships[j]);
+						scanf("%c%*c", &direction);
+						printf("%c", direction);
 						offset = 0;
 						invalid = 0;
 
-						switch (input){
+						switch (direction){
 							case 'N':
 							case 'n':
 								increment = -10;
