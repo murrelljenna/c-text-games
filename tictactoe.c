@@ -7,6 +7,7 @@
 #define SIZE 9
 #define PLAYERS 2
 #define BOARDS 1
+
 int main(int argc, char *argv[]){
 	char mark, newFile[2] = "-n", filename[50], idleInput[10], userWin, otherWin, otherMark;
 	int game_over = 0, user, selector = 0, index = -1, other, move, winner, tempId = 0, otherId = 0;
@@ -38,6 +39,8 @@ int main(int argc, char *argv[]){
 			tempId = matchPlayers(argv[1], userid);
 			if(tempId == -1){
 				printf("\nThis game is full.\n\n");
+				free(boards);
+				free(players);
 				return 0;
 			}else{
 				user = tempId;
@@ -72,7 +75,7 @@ int main(int argc, char *argv[]){
 		
 		// First round of checking if game is won or tied.
 
-		boards[0] = updateBoard(6, filename, 10, SIZE);
+		boards = updateBoard(filename, SIZE, BOARDS);
 
 		userWin = checkVictory(boards[0], mark);
 		otherWin = checkVictory(boards[0], otherMark);
@@ -108,7 +111,7 @@ int main(int argc, char *argv[]){
 		
 		// Once game has been returned to user, check boards[0] for victories again
 	
-		boards[0] = updateBoard(6, filename, 10, SIZE);
+		boards = updateBoard(filename, SIZE, BOARDS);
 		selector = getTurn(3, filename);
 
 		userWin = checkVictory(boards[0], mark);
@@ -136,7 +139,8 @@ int main(int argc, char *argv[]){
 		printBoard(boards[0], SIZE);
 
 		do {
-			move = inputMove(selector);
+			printf("\nPlayer %d, please input your column & row (CR): ", selector);
+			move = inputMove(selector, SIZE);
 			if (boards[0][move].mark == 'X' || boards[0][move].mark == 'O' || move < 0 || move > 8){
 				printf("Invalid move. ");	
 			}	
@@ -150,6 +154,7 @@ int main(int argc, char *argv[]){
 		
 		save(players, filename, boards, selector, SIZE, BOARDS);
 	}
-
+	free(boards);
+	free(players);
 	return 0;
 }

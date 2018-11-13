@@ -73,16 +73,16 @@ void printBoard(struct Tile *board, int size){
 	return;
 }
 
-int inputMove(int pNo){
+int inputMove(int pNo, int SIZE){
 	int input, row, col, index;
+	int length = sqrt(SIZE);
 	char garbage;
 
-	printf("\nPlayer %d, please input your column & row (CR): ", pNo);
 	scanf("%d%c", &input, &garbage);
 
 	col = input/10;
 	row = input%10;
-	index = row*3+col;
+	index = row*length+col;
 
 	return index;
 }
@@ -150,4 +150,22 @@ void printArr(int arr[]){
 	return;
 }
 
+int countTiles(struct Tile *board, char c, int SIZE){
+	int i, count = 0;
+	for (i = 0; i<SIZE; i++){
+		if (board[i].mark == c){
+			count++;
+		}
+	}
+	return count;
+}
 
+void freeBoards(struct Tile **boards, int BOARDS){
+	int i;
+	for (i = 0; i < BOARDS; i++){
+		free(boards[i]);
+	}
+
+	free(boards);
+	return;
+}

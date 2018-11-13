@@ -5,7 +5,9 @@
 #include <unistd.h>
 #include <string.h>
 
+int callValid(int argc, char filename[]){
 
+}
 
 int fileExists(const char * filename){
     /* try to open file to read */
@@ -65,9 +67,10 @@ int save(struct Player *players, char filename[], struct Tile **boards, int sele
  		fprintf(file, "%d\n", players[i].userid);
 	}
 	
-	fprintf(file, "%d\n", selector);
+	fprintf(file, "%d", selector);
 	
 	for (i = 0; i < BOARDS; i++){
+		fprintf(file, "\n");
 		for (j = 0; j < size; j++){
 			fprintf(file, "%c", boards[i][j].mark);
 		}
@@ -78,31 +81,39 @@ int save(struct Player *players, char filename[], struct Tile **boards, int sele
 	return 0;
 }
 
-struct Tile *updateBoard(int lineNumber, char filename[], int length, int size){
+struct Tile **updateBoard(char filename[], int SIZE, int BOARDS){
 	FILE* file = fopen(filename, "r");
-	char line[12];
-	int count = 1;
-	
-    	while (fgets(line, sizeof line, file) != NULL) /* read a line */
-    	{
-		if (count == lineNumber)
-		{
-			break;
-		}
-		else
-		{
-			count++;
-		}
-	}
-	fclose(file);
-	struct Tile *board = malloc(sizeof(struct Tile) * size);
-	
-	int i;
-	for (i = 0; i < size; i++){
-		board[i].mark = line[i];
+	char line[SIZE+1];
+	int count = 1, target, i;
+	struct Tile **boards = malloc((sizeof(struct Tile) * SIZE) * BOARDS);
+	for (i = 0; i < BOARDS; i++){
+		boards[i] = makeBoard(SIZE);
 	}
 
-	return board;
+	for (target = 4; target < (BOARDS + 4); target++){
+		while (fgets(line, sizeof line, file) != NULL) /* read a line */
+		{
+			if (count == target)
+			{
+				printf("Entered: %d\n", target);
+				printf("Content: %s\n", line);
+				for (i = 0; i < SIZE; i++){
+					boards[target-4][i].mark = line[i];
+				}
+
+				break;
+			}
+			else
+			{
+				count++;
+				printf("Count: %d\n", count);
+			}
+		}
+
+	}
+
+	fclose(file);
+	return boards;
 }
 
 int getTurn(int lineNumber, char filename[]){
