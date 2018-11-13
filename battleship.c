@@ -88,22 +88,20 @@ int main(int argc, char *argv[]){
 
 			markCount = countTiles(boards[user], ship, SIZE) + countTiles(boards[user], hit, SIZE);
 			if (markCount < 17){
-				resume = 1;
-				if (markCount < 2){
+				resume = 0;
+				if (markCount < 5 && markCount >= 2){
 					resume = 1;
-				} else if (markCount < 5 && markCount >= 2){
-					resume = 2;
 				} else if (markCount < 8 && markCount >= 5){
-					resume = 3;
+					resume = 2;
 				} else if (markCount < 12 && markCount >= 8){
-					resume = 4;
+					resume = 3;
 				} else if (markCount < 17 && markCount >= 12){
-					resume = 5;
+					resume = 4;
 				}
 
 				for (j = resume; j <= SHIPS; j++){
 					do {
-						printf("Please input starting column/row of ship %d of %d (C/R): ", j, SHIPS);
+						printf("Please input starting column/row of ship %d of %d (C/R): ", j+1, SHIPS);
 						move = inputMove(selector, SIZE); 
 						if (move < 0 || move > SIZE || boards[user][move].mark == ship){
 							printf("\nInvalid move. ");
@@ -114,6 +112,7 @@ int main(int argc, char *argv[]){
 					do {
 						printf("This ship is %d tiles long. Please input direction (N/S/E/W): ", ships[j]);
 						scanf("%c%*c", &input);
+						printf("%c", input);
 						offset = 0;
 						invalid = 0;
 
@@ -139,22 +138,23 @@ int main(int argc, char *argv[]){
 								invalid = 1;
 								break;
 						}
-						
 						if (invalid == 0){
-							for (i = 2; i <= ships[j-1]; i++){
+							for (i = 2; i <= ships[j]; i++){
+								printf("Offset: %d", offset);
 								offset+=increment;
-								if (offset < 0 || offset > SIZE || boards[user][offset].mark == ship){
+								if ((move+offset) < 0 || (move+offset) > SIZE || boards[user][move+offset].mark == ship){
 									invalid = 1;
+									printf("%d", offset);
 									printf("Invalid move. ");
 									break;
 								} else {
-									buffer[i-2] = offset;
+									buffer[i-2] = move+offset;
+									printf("Offset: %d", offset);
 								}
 							}
 							
 							if (invalid == 0){
-								for (i = 2; i <= ships[j-1]; i++){
-									printf("%d", offset);
+								for (i = 2; i <= ships[j]; i++){
 									boards[user][buffer[i-2]].mark = ship;
 								}
 							}

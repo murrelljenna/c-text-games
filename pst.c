@@ -95,8 +95,8 @@ struct Tile **updateBoard(char filename[], int SIZE, int BOARDS){
 		{
 			if (count == target)
 			{
-				printf("Entered: %d\n", target);
-				printf("Content: %s\n", line);
+				//printf("Entered: %d\n", target);
+				//printf("Content: %s\n", line);
 				for (i = 0; i < SIZE; i++){
 					boards[target-4][i].mark = line[i];
 				}
@@ -106,7 +106,7 @@ struct Tile **updateBoard(char filename[], int SIZE, int BOARDS){
 			else
 			{
 				count++;
-				printf("Count: %d\n", count);
+				//printf("Count: %d\n", count);
 			}
 		}
 
