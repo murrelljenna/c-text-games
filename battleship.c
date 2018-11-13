@@ -60,9 +60,11 @@ int main(int argc, char *argv[]){
 				game_over = 1;
 			}else{
 				user = tempId;
+				players[user].userid = userid;
 			}
 		}
 		
+
 		// Game begins
 
 		while (!game_over){
@@ -121,18 +123,22 @@ int main(int argc, char *argv[]){
 							case 'N':
 							case 'n':
 								increment = -10;
+								direction = 'N'; // Direction gets set to one case to shorten future conditional statements.
 								break;
 							case 'S':
 							case 's':
 								increment = 10;
+								direction = 'S';
 								break;
 							case 'E':
 							case 'e':
 								increment = 1;
+								direction = 'E';
 								break;
 							case 'W':
 							case 'w':
 								increment = -1;
+								direction = 'W';
 								break;
 							default:
 								printf("Invalid entry.");
@@ -143,14 +149,15 @@ int main(int argc, char *argv[]){
 							for (i = 2; i <= ships[j]; i++){
 								printf("Offset: %d", offset);
 								offset+=increment;
-								if ((move+offset) < 0 || (move+offset) > SIZE || boards[user][move+offset].mark == ship){
+								
+								if ((move+offset) < 0 || (move+offset) > SIZE || boards[user][move+offset].mark == ship ||
+								(direction == 'E' && (move+offset)%10 == 0) ||
+								(direction == 'W' && (move+offset)%10 == 9)) {
 									invalid = 1;
-									printf("%d", offset);
 									printf("Invalid move. ");
 									break;
 								} else {
 									buffer[i-2] = move+offset;
-									printf("Offset: %d", offset);
 								}
 							}
 							
@@ -168,7 +175,7 @@ int main(int argc, char *argv[]){
 					boards[other] = boardBuffer[other];
 					boards[other+2] = boardBuffer[other+2];
 
-					save(players, filename, boards, 0, SIZE, BOARDS);
+					save(players, filename, boards, selector, SIZE, BOARDS);
 					
 					for (i = 0; i < BOARDS; i++){
 						printBoard(boards[i], SIZE);
