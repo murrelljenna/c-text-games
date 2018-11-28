@@ -30,6 +30,11 @@ struct Player *makePlayers(int count){
 	return players;
 }
 
+void clearKeyboard(void)
+{
+    while (getchar() != '\n')   ; // empty execution code block on purpose
+}
+
 void printBoard(struct Tile *board, int size){
 	int i, j;
 	double dRows = sqrt((double)size);
@@ -73,7 +78,7 @@ void printBoard(struct Tile *board, int size){
 	return;
 }
 
-int inputMove(int pNo, int SIZE){
+int inputMove(int SIZE){
 	int input, row, col, index;
 	int length = sqrt(SIZE);
 	char garbage;
@@ -100,45 +105,7 @@ int contains(int needle, int *haystack){
 	return 0;
 }
 
-int checkVictory(struct Tile *board, char mark){
-	if (board[0].mark == mark){
-		if ((board[1].mark == mark && board[2].mark == mark) || (board[3].mark == mark && board[6].mark == mark) || (board[4].mark == mark && board[8].mark == mark)) {
-			return 1;
-		}
-	}
-	if (board[1].mark == mark){
-		if (board[4].mark == mark && board[7].mark == mark){
-			return 1;
-		}
-	}
-	if (board[2].mark == mark){
-		if ((board[5].mark == mark && board[8].mark == mark) || (board[4].mark == mark && board[6].mark == mark)){
-			return 1;
-		}
-	}
-	if (board[3].mark == mark){
-		if (board[4].mark == mark && board[5].mark == mark){
-			return 1;
-		}
-	}
-	if (board[6].mark == mark){
-		if (board[7].mark == mark && board[8].mark == mark){
-			return 1;
-		}
-	}
-	
-	return 0;
-}
 
-int checkTie(struct Tile *board){
-	int i, counter;
-	for (i = 0; i < 9; i++){
-		if (board[i].mark == ' '){
-			return 0;
-		}
-	}
-	return 1;
-}
 
 void printArr(int arr[]){
 	int i;

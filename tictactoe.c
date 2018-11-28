@@ -140,7 +140,7 @@ int main(int argc, char *argv[]){
 
 		do {
 			printf("\nPlayer %d, please input your column & row (CR): ", selector);
-			move = inputMove(selector, SIZE);
+			move = inputMove(SIZE);
 			if (boards[0][move].mark == 'X' || boards[0][move].mark == 'O' || move < 0 || move > 8){
 				printf("Invalid move. ");	
 			}	
@@ -157,4 +157,46 @@ int main(int argc, char *argv[]){
 	free(boards);
 	free(players);
 	return 0;
+}
+
+// Game specific functions
+
+int checkVictoryTic(struct Tile *board, char mark){
+	if (board[0].mark == mark){
+		if ((board[1].mark == mark && board[2].mark == mark) || (board[3].mark == mark && board[6].mark == mark) || (board[4].mark == mark && board[8].mark == mark)) {
+			return 1;
+		}
+	}
+	if (board[1].mark == mark){
+		if (board[4].mark == mark && board[7].mark == mark){
+			return 1;
+		}
+	}
+	if (board[2].mark == mark){
+		if ((board[5].mark == mark && board[8].mark == mark) || (board[4].mark == mark && board[6].mark == mark)){
+			return 1;
+		}
+	}
+	if (board[3].mark == mark){
+		if (board[4].mark == mark && board[5].mark == mark){
+			return 1;
+		}
+	}
+	if (board[6].mark == mark){
+		if (board[7].mark == mark && board[8].mark == mark){
+			return 1;
+		}
+	}
+	
+	return 0;
+}
+
+int checkTieTic(struct Tile *board){
+	int i, counter;
+	for (i = 0; i < 9; i++){
+		if (board[i].mark == ' '){
+			return 0;
+		}
+	}
+	return 1;
 }

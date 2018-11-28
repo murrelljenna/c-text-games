@@ -22,10 +22,8 @@ struct Player{
 struct Tile *makeBoard(int count); 
 struct Player *makePlayers(int count);
 void printBoard(struct Tile *board, int size);
-int inputMove(int pNo, int SIZE);
+int inputMove(int SIZE);
 int contains(int needle, int *haystack);
-int checkVictory(struct Tile *board, char mark);
-int checkTie(struct Tile *board);
 void printArr(int arr[]);
 
 // Reading/writing functions in pst.c
@@ -39,3 +37,10 @@ struct Tile **updateBoard(char filename[], int SIZE, int BOARDS);
 int getTurn(int lineNumber, char filename[]);
 int countTiles(struct Tile *board, char c, int SIZE);
 void freeBoards(struct Tile **boards, int BOARDS);
+
+// Game specific functions
+
+int checkVictoryTic(struct Tile *board, char mark);
+int checkTieTic(struct Tile *board);
+
+int checkVictoryBat(struct Tile **boards, int tileCount, int boardCount);
