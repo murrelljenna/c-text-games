@@ -34,10 +34,10 @@ int main(int argc, char *argv[]){
 
 		struct Player *players = makePlayers(2); 
 		struct Tile **boards = malloc((sizeof(struct Tile) * SIZE) * BOARDS);
-		boards[0] = makeBoard(SIZE);
-		boards[1] = makeBoard(SIZE);
-		boards[2] = makeBoard(SIZE);
-		boards[3] = makeBoard(SIZE);
+		boards[0] = makeBoard(SIZE); // Contains player 0's ships
+		boards[1] = makeBoard(SIZE); // Contains player 1's ships
+		boards[2] = makeBoard(SIZE); // Records player 0's hits and misses
+		boards[3] = makeBoard(SIZE); // Records player 1's hits and misses
 	
 		struct Tile **boardBuffer = malloc((sizeof(struct Tile) * SIZE) * BOARDS);
 		boardBuffer[0] = makeBoard(SIZE);
@@ -186,13 +186,12 @@ int main(int argc, char *argv[]){
 				}
 			}
 			
-			// Game starts here
+			// User finished placing battleships
 		
 			markCount = countTiles(boards[other], ship, SIZE) + countTiles(boards[other], hit, SIZE);
-			clearKeyboard();
-			while (markCount < 17) { // && quitting != 1) {
+			while (markCount < 17) { // markCount now reads OTHER player's ship count. If other player not finished, do not start.
 				printf("\nPlayer %d has not finished placing their ships. Press <ENTER> to refresh game, or type \"exit\" to quit: ", other);
-				fgets(idleInput, 10, stdin);
+				scanf("%9s", idleInput);
 
 				if (!strcmp(idleInput, "exit\n")) {
 					quitting = 1;
@@ -201,10 +200,12 @@ int main(int argc, char *argv[]){
 				markCount = countTiles(boards[other], ship, SIZE) + countTiles(boards[other], hit, SIZE);
 			} 
 
+			// Enter into main battle stage if player not exiting game. 
+
 			if (quitting != 1) {
-				winner = checkVictoryBat(boards, SIZE, BOARDS);
+				winner = checkVictoryBat(boards, SIZE, BOARDS); // Check for winning conditions.
 				if (winner < 0) {
-					while (getTurn(3, filename) != user) {	
+					while (getTurn(3, filename) != user) {	// Check if is user's turn.
 						for (i = 0; i < BOARDS/2; i++){
 							printBoard(boards[i+2], SIZE);
 							printBoard(boards[i], SIZE);
@@ -212,16 +213,40 @@ int main(int argc, char *argv[]){
 						printf("\nIt is not your turn player %d. Press <ENTER> to refresh game, or type \"exit\" to quit: ", user);
 						fflush(stdin);
 						fgets(idleInput, 10, stdin);
-						printf("%s", idleInput);
-						if (strcmp(idleInput, "exit\n")) {
+						if (!strcmp(idleInput, "exit\n")) {
 							quitting = 1;
 							break;
 						}
 					}	
 
-					selector ^= 1;
-					save(players, filename, boards, selector, SIZE, BOARDS);
-				} else {
+					// Is user's turn. Main battle code.
+
+					if (quitting != 1) {
+						do {
+							printf("Please select a column & row (C/R) to attack: ");
+							move = inputMove(SIZE);
+							if (move < 0 || move > 99) {
+								printf("Invalid move. ");
+							}
+						} while (move < 0 || move > 99);
+						
+						switch (boards[other][move].mark) {
+							case 'S':
+								boards[other][move].mark = 'X';
+								boards[user+2][move].mark = 'X';
+								printf("\nShip hit!\n");
+								break;
+							case ' ':
+								boards[other][move].mark = 'O';
+								boards[user+2][move].mark = 'O';
+								printf("\nMiss!\n");
+								break;
+						}
+
+						selector = getTurn(3,filename) ^ 1;
+						save(players, filename, boards, selector, SIZE, BOARDS);
+					}
+				} else { // If there is winner (and game is over)
 					for (i = 0; i < BOARDS/2; i++){
 						printBoard(boards[i+2], SIZE);
 						printBoard(boards[i], SIZE);
