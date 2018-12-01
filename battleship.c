@@ -65,7 +65,8 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		
-
+		
+		
 		// Game begins
 
 		while (!game_over && !quitting) {
@@ -82,7 +83,6 @@ int main(int argc, char *argv[]) {
 			if (otherId != -1) {
 				players[other].userid = otherId;
 			}
-			
 			// Prints user's tracker and main board
 
 			boards = updateBoard(filename, SIZE, BOARDS);
@@ -151,7 +151,6 @@ int main(int argc, char *argv[]) {
 						}
 						if (invalid == 0) {
 							for (i = 2; i <= ships[j]; i++) {
-								printf("Offset: %d", offset);
 								offset+=increment;
 								
 								if ((move+offset) < 0 || (move+offset) > SIZE || boards[user][move+offset].mark == ship ||
@@ -181,8 +180,8 @@ int main(int argc, char *argv[]) {
 				
 					save(players, filename, boards, 0, SIZE, BOARDS);
 					
-					printBoard(boards[i+2], SIZE);
-					printBoard(boards[i], SIZE);
+					printBoard(boards[user+2], SIZE);
+					printBoard(boards[user], SIZE);
 					printf("\n");
 					
 				}
