@@ -215,11 +215,9 @@ int main(int argc, char *argv[]) {
 							quitting = 1;
 							break;
 						}
-					}	
+					}
 
-					// Is user's turn. Main battle code.
-
-					if (quitting != 1) {
+					if (checkVictoryBat(boards, SIZE) < 0 && quitting != 1) { // If other player won while user is refreshing game, entire game loop will reiterate and fall into the else on line 245.
 						do {
 							printf("Please select a column & row (C/R) to attack: ");
 							move = inputMove(SIZE);
@@ -244,7 +242,7 @@ int main(int argc, char *argv[]) {
 						selector = getTurn(3,filename) ^ 1;
 						save(players, filename, boards, selector, SIZE, BOARDS);
 					}
-				} else { // If there is winner (and game is over)
+				} else { // If there is winner while user is in refresh game loop, this block will be entered upon re-iteration of main game loop.
 					printBoard(boards[user+2], SIZE);
 					printBoard(boards[user], SIZE);
 					printf("\n");
