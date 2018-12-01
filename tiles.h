@@ -43,4 +43,4 @@ void freeBoards(struct Tile **boards, int BOARDS);
 int checkVictoryTic(struct Tile *board, char mark);
 int checkTieTic(struct Tile *board);
 
-int checkVictoryBat(struct Tile **boards, int tileCount, int boardCount);
+int checkVictoryBat(struct Tile **boards, int tileCount);

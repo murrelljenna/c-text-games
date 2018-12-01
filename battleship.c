@@ -9,14 +9,14 @@
 #define BOARDS 4
 #define SHIPS 5
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[]) {
 	char newFile[3] = "-n";
 
 	// Check validity of stdin call
 
-	if (argc == 1 || (argc == 2 && argv[1] == newFile)){
+	if (argc == 1 || (argc == 2 && argv[1] == newFile)) {
 		printf("Save file required.\nUsage: ./battleship [-n] [<filename>]\nUse [-n] to create new file, omit to load existing file\n");
-	}else if (argc == 2 && (fileExists(argv[1]) == 0)){	
+	}else if (argc == 2 && (fileExists(argv[1]) == 0)) {	
 		printf("Save file not found.\nUsage: ./battleship [-n] [<filename>]\nUse [-n] to create new file, omit to load existing file\n");
 	}else {
 
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]){
 
 		// Starting new game or slotting player into existing game
 
-		if (strcmp(newFile, argv[1]) == 0){
+		if (strcmp(newFile, argv[1]) == 0) {
 			user = 0;
 			players[user].userid = userid;
 
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]){
 		}else{
 			strcpy(filename, argv[1]);
 			tempId = matchPlayers(argv[1], userid);
-			if(tempId == -1){
+			if(tempId == -1) {
 				printf("\nThis game is full.\n\n");
 				game_over = 1;
 			}else{
@@ -68,8 +68,8 @@ int main(int argc, char *argv[]){
 
 		// Game begins
 
-		while (!game_over && quitting != 1) {
-			switch(user){
+		while (!game_over && !quitting) {
+			switch(user) {
 				case 0:
 					other = 1;
 					break;				
@@ -79,36 +79,38 @@ int main(int argc, char *argv[]){
 			}
 
 			otherId = matchOtherPlayer(filename, userid);
-			if (otherId != -1){
+			if (otherId != -1) {
 				players[other].userid = otherId;
 			}
 			
-			for (i = 0; i < BOARDS/2; i++){
-				printBoard(boards[i+2], SIZE);
-				printBoard(boards[i], SIZE);
-			}
+			// Prints user's tracker and main board
+
+			boards = updateBoard(filename, SIZE, BOARDS);
+			printBoard(boards[user+2], SIZE);
+			printBoard(boards[user], SIZE);
+			printf("\n");
 
 			// Ship setups
-			boards = updateBoard(filename, SIZE, BOARDS);
+
 			markCount = countTiles(boards[user], ship, SIZE) + countTiles(boards[user], hit, SIZE);
 			if (markCount < 17) {
 				resume = 0;
-				if (markCount < 5 && markCount >= 2){
+				if (markCount < 5 && markCount >= 2) {
 					printf("de rars");
 					resume = 1;
-				} else if (markCount < 8 && markCount >= 5){
+				} else if (markCount < 8 && markCount >= 5) {
 					resume = 2;
-				} else if (markCount < 12 && markCount >= 8){
+				} else if (markCount < 12 && markCount >= 8) {
 					resume = 3;
-				} else if (markCount < 17 && markCount >= 12){
+				} else if (markCount < 17 && markCount >= 12) {
 					resume = 4;
 				}
 
-				for (j = resume; j < SHIPS; j++){
+				for (j = resume; j < SHIPS; j++) {
 					do {
 						printf("Please input starting column/row of ship %d of %d (C/R): ", j+1, SHIPS);
 						move = inputMove(SIZE); 
-						if (move < 0 || move > SIZE || boards[user][move].mark == ship){
+						if (move < 0 || move > SIZE || boards[user][move].mark == ship) {
 							printf("\nInvalid move. ");
 						}
 					} while (move < 0 || move > SIZE || boards[user][move].mark == ship);
@@ -121,7 +123,7 @@ int main(int argc, char *argv[]){
 						offset = 0;
 						invalid = 0;
 
-						switch (direction){
+						switch (direction) {
 							case 'N':
 							case 'n':
 								increment = -10;
@@ -147,8 +149,8 @@ int main(int argc, char *argv[]){
 								invalid = 1;
 								break;
 						}
-						if (invalid == 0){
-							for (i = 2; i <= ships[j]; i++){
+						if (invalid == 0) {
+							for (i = 2; i <= ships[j]; i++) {
 								printf("Offset: %d", offset);
 								offset+=increment;
 								
@@ -163,8 +165,8 @@ int main(int argc, char *argv[]){
 								}
 							}
 							
-							if (invalid == 0){
-								for (i = 2; i <= ships[j]; i++){
+							if (invalid == 0) {
+								for (i = 2; i <= ships[j]; i++) {
 									boards[user][buffer[i-2]].mark = ship;
 								}
 							}
@@ -176,13 +178,13 @@ int main(int argc, char *argv[]){
 					boardBuffer = updateBoard(filename, SIZE, BOARDS);
 					boards[other] = boardBuffer[other];
 					boards[other+2] = boardBuffer[other+2];
-
+				
 					save(players, filename, boards, 0, SIZE, BOARDS);
 					
-					for (i = 0; i < BOARDS/2; i++){
-						printBoard(boards[i+2], SIZE);
-						printBoard(boards[i], SIZE);
-					}
+					printBoard(boards[i+2], SIZE);
+					printBoard(boards[i], SIZE);
+					printf("\n");
+					
 				}
 			}
 			
@@ -191,7 +193,7 @@ int main(int argc, char *argv[]){
 			markCount = countTiles(boards[other], ship, SIZE) + countTiles(boards[other], hit, SIZE);
 			while (markCount < 17) { // markCount now reads OTHER player's ship count. If other player not finished, do not start.
 				printf("\nPlayer %d has not finished placing their ships. Press <ENTER> to refresh game, or type \"exit\" to quit: ", other);
-				scanf("%9s", idleInput);
+				fgets(idleInput, 9, stdin);
 
 				if (!strcmp(idleInput, "exit\n")) {
 					quitting = 1;
@@ -203,13 +205,9 @@ int main(int argc, char *argv[]){
 			// Enter into main battle stage if player not exiting game. 
 
 			if (quitting != 1) {
-				winner = checkVictoryBat(boards, SIZE, BOARDS); // Check for winning conditions.
+				winner = checkVictoryBat(boards, SIZE); // Check for winning conditions.
 				if (winner < 0) {
 					while (getTurn(3, filename) != user) {	// Check if is user's turn.
-						for (i = 0; i < BOARDS/2; i++){
-							printBoard(boards[i+2], SIZE);
-							printBoard(boards[i], SIZE);
-						}
 						printf("\nIt is not your turn player %d. Press <ENTER> to refresh game, or type \"exit\" to quit: ", user);
 						fflush(stdin);
 						fgets(idleInput, 10, stdin);
@@ -247,10 +245,9 @@ int main(int argc, char *argv[]){
 						save(players, filename, boards, selector, SIZE, BOARDS);
 					}
 				} else { // If there is winner (and game is over)
-					for (i = 0; i < BOARDS/2; i++){
-						printBoard(boards[i+2], SIZE);
-						printBoard(boards[i], SIZE);
-					}
+					printBoard(boards[user+2], SIZE);
+					printBoard(boards[user], SIZE);
+					printf("\n");
 
 					printf("\nPlayer %d wins!\n\n", winner);
 					game_over = 1;
@@ -267,27 +264,14 @@ int main(int argc, char *argv[]){
 
 // Game specific functions
 
-int checkVictoryBat(struct Tile **boards, int tileCount, int boardCount){
+int checkVictoryBat(struct Tile **boards, int tileCount) {
 	int i, count, winner = -1;
-	for (i = 0; i < tileCount; i++){
-		if (boards[0][i].mark == 'S'){
+	for (i = 0; i < 2; i++) {
+		if (!countTiles(boards[i], 'S', tileCount)) {
+			winner = i ^ 1;
 			break;
 		}
-
-		if (i == 99){
-			winner = 1;
-		}
 	}
-
-	for (i = 1; i < tileCount; i++){
-		if (boards[0][i].mark == 'S'){
-			break;
-		}
-
-		if (i == 99){
-			winner = 0;
-		}
-	}
-
+	
 	return winner;
 }
