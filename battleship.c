@@ -21,8 +21,8 @@ int main(int argc, char *argv[]) {
 	}else {
 
 		// Validity check successfull
-
-		int user, selector = 0, tempId, otherId, game_over = 0, i, player, j, move, other, input, invalid, winner, quitting = 0;
+		short selector = 0, onExit = 0, game_over = 0, quitting = 0; // All boolean variables.
+		int user, tempId, otherId, i, player, j, move, other, input, invalid, winner;
 		char direction;
 		int increment, offset, markCount, resume;
 		int ships[5] = {2, 3, 3, 4, 5}, buffer[5];
@@ -207,18 +207,28 @@ int main(int argc, char *argv[]) {
 				winner = checkVictoryBat(boards, SIZE); // Check for winning conditions.
 				if (winner < 0) {
 					while (getTurn(3, filename) != user) {	// Check if is user's turn.
+						onExit = 1;
 						printf("\nIt is not your turn player %d. Press <ENTER> to refresh game, or type \"exit\" to quit: ", user);
 						fflush(stdin);
 						fgets(idleInput, 10, stdin);
 						if (!strcmp(idleInput, "exit\n")) {
 							quitting = 1;
+							onExit = 0;
 							break;
 						}
 					}
 
+					if (onExit) { // Prints board when user's turn. Value gets set in user's turn loop
+						printBoard(boards[user+2], SIZE);
+						printBoard(boards[user], SIZE);
+						onExit = 0;
+					}
+
+					boards = updateBoard(filename, SIZE, BOARDS);
+
 					if (checkVictoryBat(boards, SIZE) < 0 && quitting != 1) { // If other player won while user is refreshing game, entire game loop will reiterate and fall into the else on line 245.
 						do {
-							printf("Please select a column & row (C/R) to attack: ");
+							printf("\nPlease select a column & row (C/R) to attack: ");
 							move = inputMove(SIZE);
 							if (move < 0 || move > 99) {
 								printf("Invalid move. ");
