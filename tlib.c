@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
+
 struct Tile *makeBoard(int count) {
 	struct Tile *board = malloc(sizeof(struct Tile) * count);
 	int i;
@@ -33,6 +34,11 @@ struct Player *makePlayers(int count) {
 void clearKeyboard(void)
 {
     while (getchar() != '\n')   ; // empty execution code block on purpose
+}
+
+void pause(void){
+	printf("(Press Enter to Continue)");
+	clearKeyboard();
 }
 
 void printBoard(struct Tile *board, int size) {

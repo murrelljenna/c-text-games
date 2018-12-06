@@ -93,8 +93,8 @@ struct Tile **updateBoard(char filename[], int SIZE, int BOARDS){
 	for (target = 4; target < (BOARDS + 4); target++){
 		while (fgets(line, sizeof line, file) != NULL) {
 			if (count == target) {
-				printf("Entered: %d\n", target);
-				printf("Content: %s\n", line);
+				//printf("Entered: %d\n", target);
+				//printf("Content: %s\n", line);
 				for (i = 0; i < SIZE; i++){
 					boards[target-4][i].mark = line[i];
 				}

@@ -39,6 +39,7 @@ int main(int argc, char *argv[]){
 			tempId = matchPlayers(argv[1], userid);
 			if(tempId == -1){
 				printf("\nThis game is full.\n\n");
+				free(boards[0]);
 				free(boards);
 				free(players);
 				return 0;
@@ -77,8 +78,8 @@ int main(int argc, char *argv[]){
 
 		boards = updateBoard(filename, SIZE, BOARDS);
 
-		userWin = checkVictory(boards[0], mark);
-		otherWin = checkVictory(boards[0], otherMark);
+		userWin = checkVictoryTic(boards[0], mark);
+		otherWin = checkVictoryTic(boards[0], otherMark);
 		if (userWin || otherWin){
 			game_over = 1;	
 			printBoard(boards[0], SIZE);
@@ -86,20 +87,26 @@ int main(int argc, char *argv[]){
 			printf("\nPlayer %d wins!\n\n", winner);
 			save(players, filename, boards, selector, SIZE, BOARDS);
 
+			free(boards[0]);
+			free(boards);
+			free(players);
 			return 0;
 		}
 
-		if (checkTie(boards[0])){
+		if (checkTieTic(boards[0])){
 			game_over = 1;
 			
 			printBoard(boards[0], SIZE);
 			printf("\nTie!\n");			
 			save(players, filename, boards, selector, SIZE, BOARDS);
 
+			free(boards[0]);
+			free(boards);
+			free(players);
 			return 0;
-		}
+	}
 
-		// If no victory yet, check if game has been updated
+	// If no victory yet, check if game has been updated
 
 		while (getTurn(3, filename) != user) {
 			printBoard(boards[0], SIZE);
@@ -114,8 +121,8 @@ int main(int argc, char *argv[]){
 		boards = updateBoard(filename, SIZE, BOARDS);
 		selector = getTurn(3, filename);
 
-		userWin = checkVictory(boards[0], mark);
-		otherWin = checkVictory(boards[0], otherMark);
+		userWin = checkVictoryTic(boards[0], mark);
+		otherWin = checkVictoryTic(boards[0], otherMark);
 		if (userWin || otherWin){
 			game_over = 1;	
 			printBoard(boards[0], SIZE);
@@ -123,16 +130,22 @@ int main(int argc, char *argv[]){
 			printf("\nPlayer %d wins!\n\n", winner);
 			save(players, filename, boards, selector, SIZE, BOARDS);
 
+			free(boards[0]);
+			free(boards);
+			free(players);
 			return 0;
 		}
 
-		if (checkTie(boards[0])){
+		if (checkTieTic(boards[0])){
 			game_over = 1;
 			
 			printBoard(boards[0], SIZE);
 			printf("\nTie!\n");			
 			save(players, filename, boards, selector, SIZE, BOARDS);
 
+			free(boards[0]);
+			free(boards);
+			free(players);
 			return 0;
 		}
 
@@ -154,6 +167,7 @@ int main(int argc, char *argv[]){
 		
 		save(players, filename, boards, selector, SIZE, BOARDS);
 	}
+	free(boards[0]);
 	free(boards);
 	free(players);
 	return 0;
