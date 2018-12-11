@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include "tiles.h"
 
 #define SIZE 100
@@ -20,12 +22,13 @@ int main(int argc, char *argv[]) {
 		printf("Save file not found.\nUsage: ./battleship [-n] [<filename>]\nUse [-n] to create new file, omit to load existing file\n");
 	} else { // Validity check successfull
 		short selector = 0, enteredLoop = 1, game_over = 0, quitting = 0; // All boolean variables.
-		int user, tempId, otherId, i, player, j, move, other, input, invalid, winner;
-		char direction;
+		int user, tempId, otherId, move, other, invalid, winner;
+		int i, j; // Loop variables.
 		int increment, offset, markCount, resume;
 		int ships[5] = {2, 3, 3, 4, 5}, buffer[5];
-		int userid; // = getuid();
-		scanf("%d", &userid);
+		int userid = getuid();
+
+		char direction;
 		char filename[25], idleInput[10];
 
 		const char ship = 'S', hit = 'X', miss = 'O';
@@ -37,7 +40,7 @@ int main(int argc, char *argv[]) {
 		boards[2] = makeBoard(SIZE); // Records player 0's hits and misses
 		boards[3] = makeBoard(SIZE); // Records player 1's hits and misses
 	
-		struct Tile **boardBuffer = malloc((sizeof(struct Tile) * SIZE) * BOARDS);
+		struct Tile **boardBuffer = malloc((sizeof(struct Tile) * SIZE) * BOARDS); // Seperate pointer take read values from files to before passing on to actual game board.
 		boardBuffer[0] = makeBoard(SIZE);
 		boardBuffer[1] = makeBoard(SIZE);
 		boardBuffer[2] = makeBoard(SIZE);
@@ -63,9 +66,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 		
-		
-		
-		// Game begins
+		// Main game loop begins
 
 		while (!game_over && !quitting) {
 			switch(user) {
@@ -78,9 +79,11 @@ int main(int argc, char *argv[]) {
 			}
 
 			otherId = matchOtherPlayer(filename, userid);
+
 			if (otherId != -1) {
 				players[other].userid = otherId;
 			}
+
 			// Prints user's tracker and main board
 
 			boards = updateBoard(filename, SIZE, BOARDS);
@@ -183,7 +186,6 @@ int main(int argc, char *argv[]) {
 					printBoard(boards[user+2], SIZE);
 					printBoard(boards[user], SIZE);
 					printf("\n");
-					
 				}
 			}
 			
@@ -243,17 +245,18 @@ int main(int argc, char *argv[]) {
 						
 						switch (boards[other][move].mark) {
 							case 'S':
-								boards[other][move].mark = 'X';
-								boards[user+2][move].mark = 'X';
+								boards[other][move].mark = hit;
+								boards[user+2][move].mark = hit;
 								printf("Ship hit!\n");
 								break;
 							case ' ':
-								boards[other][move].mark = 'O';
-								boards[user+2][move].mark = 'O';
+								boards[other][move].mark = miss;
+								boards[user+2][move].mark = miss;
 								printf("Miss!\n");
 								break;
 						}
-						pause();
+
+						pauseForInput();
 						selector = getTurn(3,filename) ^ 1;
 						save(players, filename, boards, selector, SIZE, BOARDS);
 					}
@@ -272,14 +275,14 @@ int main(int argc, char *argv[]) {
 		freeBoards(boardBuffer, BOARDS);
 		free(players);
 	}
-	
+
 	return 0;
 }
 
 // Game specific functions
 
 int checkVictoryBat(struct Tile **boards, int tileCount) {
-	int i, count, winner = -1;
+	int i, winner = -1;
 	for (i = 0; i < 2; i++) {
 		if (!countTiles(boards[i], 'S', tileCount)) {
 			winner = i ^ 1;

@@ -36,7 +36,7 @@ void clearKeyboard(void)
     while (getchar() != '\n')   ; // empty execution code block on purpose
 }
 
-void pause(void){
+void pauseForInput(void) {
 	printf("(Press Enter to Continue)");
 	clearKeyboard();
 }

@@ -25,7 +25,8 @@ void printBoard(struct Tile *board, int size);
 int inputMove(int SIZE);
 int contains(int needle, int *haystack);
 void printArr(int arr[]);
-
+void clearKeyboard(void);
+void pauseForInput(void);
 // Reading/writing functions in pst.c
 
 int fileExists(const char * filename);
