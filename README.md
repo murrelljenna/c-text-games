@@ -1,6 +1,6 @@
-#c-text-games
+# c-text-games
 
-##Introduction:
+## Introduction:
 
 C-text-games is a set of simple 2-player command line text games for linux. The games are written in C and have no other dependencies. 
 
@@ -13,14 +13,14 @@ Use the Makefile to compile the modules. Run the game by running the resulting e
 
 As mentioned before, you can play "hot-seat" or live. The game is played over SSH on a single server computer. The program matches a player in the game to their linux userid, so you can exit and join back at any time without the game losing your information. You and your opponent can make moves whether or not the other player is present in the game. Once you make your move you will simply be prompted to wait for your opponent's move - you can remain in-game and wait or log off and check back later.
 
-##Setup:
+## Setup:
 
 Use the Makefile in the source directory. The following commands, run in the source folder, will compile new game executables: 
 
 	- make bat (battleship)
 	- make tic (tictactoe).
 
-##GitHub:
+## GitHub:
 
 https://github.com/murrelljenna/c-text-games 
 git@github.com:murrelljenna/c-text-games.git
