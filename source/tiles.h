@@ -1,10 +1,5 @@
-/*
- * To Do:
- *
- * - Change player-side victory checking to board-side checking.
- *
- *
- */
+#ifndef TILES_H
+#define TILES_H
 
 struct Tile{
 	char mark;
@@ -27,6 +22,7 @@ int contains(int needle, int *haystack);
 void printArr(int arr[]);
 void clearKeyboard(void);
 void pauseForInput(void);
+
 // Reading/writing functions in pst.c
 
 int fileExists(const char * filename);
@@ -43,5 +39,6 @@ void freeBoards(struct Tile **boards, int BOARDS);
 
 int checkVictoryTic(struct Tile *board, char mark);
 int checkTieTic(struct Tile *board);
-
 int checkVictoryBat(struct Tile **boards, int tileCount);
+
+#endif
